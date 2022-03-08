@@ -1,5 +1,7 @@
 ﻿namespace PearlNecklace
 {
+    //public delegate void PearlActionDelegate(IPearl pearl);
+    //public delegate void Action<IPearl>(IPearl obj);
     public class Necklace : INecklace
     {
         List<IPearl> _stringOfPearls = new List<IPearl>();
@@ -63,6 +65,13 @@
             return c;
         }
 
+        public void ForEachPearl (Action<IPearl> pearlAction)
+        {
+            foreach (var pearl in _stringOfPearls)
+            {
+                pearlAction(pearl);
+            }
+        }
         public override string ToString()
         {
             string sRet = $"Necklace has the following pearls:\n";

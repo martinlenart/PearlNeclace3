@@ -7,6 +7,8 @@ using System.IO.Compression;
 
 namespace PearlNecklace
 {
+    //public delegate void NecklaceDelegate(INecklace necklaceDelegate);    
+    // Replaced by .NET delegate void Action<INecklace>
     public class NecklaceBag : INecklaceBag
     {
         List<INecklace> _bagOfNecklaces = new List<INecklace>();  
@@ -59,6 +61,14 @@ namespace PearlNecklace
             return count;   
         }
 
+        public void ForEachPearl(Action<IPearl> pearlAction)
+        {
+            foreach (var necklace in _bagOfNecklaces)
+            {
+                necklace.ForEachPearl(pearlAction);
+            }
+        }
+
         public override string ToString()
         {
             string sRet = $"My bag had the following necklaces\n";
@@ -80,13 +90,15 @@ namespace PearlNecklace
         #region Class Factory for creating an instance filled with Random data
         internal static class Factory
         {
-            internal static NecklaceBag CreateRandomNecklaceBag(int NrOfNecklaces)
+            internal static NecklaceBag CreateRandomNecklaceBag(int NrOfNecklaces, Action<INecklace> NewNecklaceAction)
             {
                 var rnd = new Random();
                 var necklaceBag = new NecklaceBag();
                 for (int i = 0; i < NrOfNecklaces; i++)
                 {
-                    necklaceBag._bagOfNecklaces.Add(Necklace.Factory.CreateRandomNecklace(rnd.Next(5,50)));
+                    var necklace = Necklace.Factory.CreateRandomNecklace(rnd.Next(5, 50));
+                    necklaceBag._bagOfNecklaces.Add(necklace);
+                    NewNecklaceAction(necklace);
                 }
                 return necklaceBag;    
             }

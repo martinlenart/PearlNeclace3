@@ -11,5 +11,6 @@
         int Count(PearlColor? color);
         void Sort();
         public int IndexOf(IPearl pearl);
+        public void ForEachPearl(Action<IPearl> pearlAction);
     }
 }
